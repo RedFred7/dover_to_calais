@@ -1,0 +1,4 @@
+--no-private
+--title "DoverToCalais"
+lib/**/*.erb
+lib/**/*.rb
