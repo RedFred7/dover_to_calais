@@ -1,12 +1,13 @@
-require "dover_to_calais/version"
+require "dover_to_calais/version"   #gem lib file
+require "dover_to_calais/ontology"  #gem lib file
+require 'open-uri'  # in std library
+require 'nokogiri'
+require 'eventmachine'
+require 'em-http-request'
+require 'yomu'
+
 
 module DoverToCalais
-  require 'nokogiri'
-  require 'eventmachine'
-  require 'em-http-request'
-  require 'open-uri'
-  require 'yomu'
-  require_relative 'dover_to_calais/ontology.rb'
 
 
   PROXY = nil
@@ -129,14 +130,15 @@ module DoverToCalais
       node_count =  node.attribute('count').text.to_i if node.has_attribute?('count')
       node_normalized =  node.attribute('normalized').text if node.has_attribute?('normalized')
       node_importance = node.attribute('importance').text.to_i if node.has_attribute?('importance')
+      node_orig_value =  node.xpath('originalValue').text if node.name.eql?('SocialTag')
 
       ResponseItem.new(node.name,
-                       node.content,
+                       node.text,
                        node_relevance,
                        node_count,
                        node_normalized,
                        node_importance,
-                       node.xpath('originalValue').text )
+                       node_orig_value )
 
     end
 
