@@ -238,7 +238,7 @@ end
 
 which will produce:
 
-There are 1 events like that in the source
+> There are 1 events like that in the source
 
 
 Now let's find all companies involved in any business partnerships:
@@ -266,17 +266,17 @@ end
 
 which gives us:
 
-Company: BBC News a.k.a , relevance = 0.678 <br>
-Company: Google a.k.a GOOGLE INC., relevance = 0.508 <br>
-Company: Flutter a.k.a FLUTTER COM INC, relevance = 0.531 <br>
-Company: TV Radio a.k.a HERALD & WEEKLY-TV,RADIO OPS, relevance = 0.558 <br>
-Company: Microsoft a.k.a MICROSOFT CORPORATION, relevance = 0.303 <br>
-Company: Adobe a.k.a ADOBE SYSTEMS INCORPORATED, relevance = 0.193 <br>
-Company: Netflix a.k.a NETFLIX, INC., relevance = 0.301 <br>
-Company: Y Combinator a.k.a Y Combinator, relevance = 0.258 <br>
-Company: Nintendo a.k.a Nintendo Co., Ltd., relevance = 0.286 <br>
-Company: Samsung a.k.a Samsung C&T Corporation, relevance = 0.285 <br>
-Company: Glyndwr University a.k.a , relevance = 0.269 <br>
+> Company: BBC News a.k.a , relevance = 0.678 <br>
+> Company: Google a.k.a GOOGLE INC., relevance = 0.508 <br>
+> Company: Flutter a.k.a FLUTTER COM INC, relevance = 0.531 <br>
+> Company: TV Radio a.k.a HERALD & WEEKLY-TV,RADIO OPS, relevance = 0.558 <br>
+> Company: Microsoft a.k.a MICROSOFT CORPORATION, relevance = 0.303 <br>
+> Company: Adobe a.k.a ADOBE SYSTEMS INCORPORATED, relevance = 0.193 <br>
+> Company: Netflix a.k.a NETFLIX, INC., relevance = 0.301 <br>
+> Company: Y Combinator a.k.a Y Combinator, relevance = 0.258 <br>
+> Company: Nintendo a.k.a Nintendo Co., Ltd., relevance = 0.286 <br>
+> Company: Samsung a.k.a Samsung C&T Corporation, relevance = 0.285 <br>
+> Company: Glyndwr University a.k.a , relevance = 0.269 <br>
 
 
 
@@ -306,11 +306,11 @@ end
 
 Which will give us all the gesture-recognition products that Google is associated with according to our data source: 
 
-&lt;struct DoverToCalais::ResponseItem name="Company", value="Google", relevance=0.506, count=7, normalized="GOOGLE INC.", importance=nil, originalValue=nil&gt; <br>
-&lt;struct DoverToCalais::ResponseItem name="Product", value="Xbox Kinect", relevance=0.286, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br>
-&lt;struct DoverToCalais::ResponseItem name="Product", value="Galaxy S4 smartphone", relevance=0.282, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br>
-&lt;struct DoverToCalais::ResponseItem name="Product", value="Wii", relevance=0.286, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br>
-&lt;struct DoverToCalais::ResponseItem name="Product", value="Galaxy S4", relevance=0.282, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br>
+> &lt;struct DoverToCalais::ResponseItem name="Company", value="Google", relevance=0.506, count=7, normalized="GOOGLE INC.", importance=nil, originalValue=nil&gt; <br>
+> &lt;struct DoverToCalais::ResponseItem name="Product", value="Xbox Kinect", relevance=0.286, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br>
+> &lt;struct DoverToCalais::ResponseItem name="Product", value="Galaxy S4 smartphone", relevance=0.282, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br>
+> &lt;struct DoverToCalais::ResponseItem name="Product", value="Wii", relevance=0.286, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br>
+> &lt;struct DoverToCalais::ResponseItem name="Product", value="Galaxy S4", relevance=0.282, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br>
 
 
 
