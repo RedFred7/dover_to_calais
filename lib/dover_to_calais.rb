@@ -203,7 +203,7 @@ module DoverToCalais
     # @return N/A
     def to_calais(&block)
       #fred rules ok
-      if @document
+      if !@error
         @callbacks << block
       else
         result = ResponseData.new nil, @error
@@ -217,7 +217,10 @@ module DoverToCalais
 
       @document = get_src_data(@data_src)
       begin
-        if @document
+        if @document[0..2].eql?('ERR')
+         # puts  @document
+          raise 'Invalid data source'
+        else
           response = nil
 
           connection_options = {:inactivity_timeout => 0}
@@ -250,7 +253,9 @@ module DoverToCalais
               end #block
             end #block
 
-            result =   response ? ResponseData.new(response, nil) :  ResponseData.new(nil,'ERR: unable to find <OpenCalaisSimple> tag in response data')
+            result =   response ?
+                      ResponseData.new(response, nil) :
+                      ResponseData.new(nil,'ERR: cannot find <OpenCalaisSimple> tag in response data - source invalid?')
             @callbacks.each { |c| c.call(result) }
           end  #callback
 
@@ -264,8 +269,9 @@ module DoverToCalais
 
         end  #if
       rescue  Exception=>e
-        puts "ERR: #{e}"
-        exit 0
+        #result = ResponseData.new nil,  "ERR: #{e}"
+        #@callbacks.each { |c| c.call(result) }
+        @error = "ERR: #{e}"
       end
 
     end  #method
