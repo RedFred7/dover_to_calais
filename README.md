@@ -97,12 +97,12 @@ end
 This will produce the following result:
 
 
-> do some stuff....
-> do some more stuff....
-> <?xml version="1.0"?>
-> &lt;OpenCalaisSimple&gt;
-> ..........
-> (the rest of the XML response from OpenCalais)
+> do some stuff....  <br>
+> do some more stuff.... <br>
+> <?xml version="1.0"?>  <br>
+> &lt;OpenCalaisSimple&gt;  <br>
+> ..........    <br>
+> (the rest of the XML response from OpenCalais)  <br>
 
 
 As can be observed, the callback (#to_calais) is trigerred after the rest of the code has been executed and only when the OpenCalais request has been completed.
@@ -169,13 +169,13 @@ end
 This will pick out all entities tagged 'Company' from the data source. The output will be an Array of ResponseItem objects. 
 
 
-&lt;struct DoverToCalais::ResponseItem name="Company", value="BBC News", relevance=0.654, count=13, normalized=nil, importance=nil, originalValue=nil&gt;<br>  
-&lt;struct DoverToCalais::ResponseItem name="Company", value="TV Radio", relevance=0.565, count=2, normalized="HERALD & WEEKLY-TV,RADIO OPS", importance=nil, originalValue=nil&gt;  <br>
-&lt;struct DoverToCalais::ResponseItem name="Company", value="Reuters", relevance=0.255, count=2, normalized="THOMSON REUTERS GROUP LIMITED", importance=nil, originalValue=nil&gt;  <br>
-&lt;struct DoverToCalais::ResponseItem name="Company", value="Twitter", relevance=0.395, count=1, normalized="TWITTER, INC.", importance=nil, originalValue=nil&gt;  <br>
-&lt;struct DoverToCalais::ResponseItem name="Company", value="Huffington Post UK", relevance=0.136, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br> 
-&lt;struct DoverToCalais::ResponseItem name="Company", value="Ireland Kenya", relevance=0.144, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br> 
-&lt;struct DoverToCalais::ResponseItem name="Company", value="Yahoo! UK", relevance=0.144, count=1, normalized="YAHOO! UK LIMITED", importance=nil, originalValue=nil&gt; <br>
+> &lt;struct DoverToCalais::ResponseItem name="Company", value="BBC News", relevance=0.654, count=13, normalized=nil, importance=nil, originalValue=nil&gt;<br>
+> &lt;struct DoverToCalais::ResponseItem name="Company", value="TV Radio", relevance=0.565, count=2, normalized="HERALD & WEEKLY-TV,RADIO OPS", importance=nil, originalValue=nil&gt;  <br>
+> &lt;struct DoverToCalais::ResponseItem name="Company", value="Reuters", relevance=0.255, count=2, normalized="THOMSON REUTERS GROUP LIMITED", importance=nil, originalValue=nil&gt;  <br>
+> &lt;struct DoverToCalais::ResponseItem name="Company", value="Twitter", relevance=0.395, count=1, normalized="TWITTER, INC.", importance=nil, originalValue=nil&gt;  <br>
+> &lt;struct DoverToCalais::ResponseItem name="Company", value="Huffington Post UK", relevance=0.136, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br>
+> &lt;struct DoverToCalais::ResponseItem name="Company", value="Ireland Kenya", relevance=0.144, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br>
+> &lt;struct DoverToCalais::ResponseItem name="Company", value="Yahoo! UK", relevance=0.144, count=1, normalized="YAHOO! UK LIMITED", importance=nil, originalValue=nil&gt; <br>
 
 
 If this output looks a bit cluttered, we can easily tidy it up:
@@ -204,14 +204,14 @@ end
 Which will give us:
 
 
-Company: BBC News, relevance = 0.656  <br>
-Company: TV Radio, relevance = 0.566  <br>
-Company: Reuters, relevance = 0.26  <br>
-Company: Guardian.co.uk, relevance = 0.143  <br>
-Company: Twitter, relevance = 0.399  <br>
-Company: Huffington Post UK, relevance = 0.132  <br>
-Company: Ireland Kenya, relevance = 0.139  <br>
-Company: Yahoo! UK, relevance = 0.139  <br>
+> Company: BBC News, relevance = 0.656  <br>
+> Company: TV Radio, relevance = 0.566  <br>
+> Company: Reuters, relevance = 0.26  <br>
+> Company: Guardian.co.uk, relevance = 0.143  <br>
+> Company: Twitter, relevance = 0.399  <br>
+> Company: Huffington Post UK, relevance = 0.132  <br>
+> Company: Ireland Kenya, relevance = 0.139  <br>
+> Company: Yahoo! UK, relevance = 0.139  <br>
 
 
 
