@@ -79,93 +79,92 @@ As DoverToCalais uses the awesome-ness of [EventMachine](http://rubyeventmachine
 ```ruby
 EM.run do
 
-# use Control + C to stop the EM
-Signal.trap('INT')  { EventMachine.stop }
-Signal.trap('TERM') { EventMachine.stop }
+    # use Control + C to stop the EM
+    Signal.trap('INT')  { EventMachine.stop }
+    Signal.trap('TERM') { EventMachine.stop }
 
-DoverToCalais::API_KEY =  'my-opencalais-api-key'
-dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/world-africa-24412315')
+    DoverToCalais::API_KEY =  'my-opencalais-api-key'
+    dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/world-africa-24412315')
 
-puts 'do some stuff....'
+    puts 'do some stuff....'
 
-dover.to_calais { |response| puts response.error ? response.error : response }
+    dover.to_calais { |response| puts response.error ? response.error : response }
 
-puts 'do some stuff....'
+    puts 'do some stuff....'
 
 end
 ```
 This will produce the following result:
-<div class="output">
+
 do some stuff....  
 do some more stuff....  
 &lt;?xml version="1.0"?&gt;  
 &lt;OpenCalaisSimple&gt;   
 ..........
 (the rest of the XML response from OpenCalais) 
-</div>
+
 
 As can be observed, the callback (#to_calais) is trigerred after the rest of the code has been executed and only when the OpenCalais request has been completed.
 
 Of course, we can analyse more than one sources at a time:
-    ```ruby
-    EM.run do
+```ruby
+EM.run do
 
-      # use Control + C to stop the EM
-      Signal.trap('INT')  { EventMachine.stop }
-      Signal.trap('TERM') { EventMachine.stop }
+  # use Control + C to stop the EM
+  Signal.trap('INT')  { EventMachine.stop }
+  Signal.trap('TERM') { EventMachine.stop }
 
-      DoverToCalais::API_KEY =  'my-opencalais-api-key'
+  DoverToCalais::API_KEY =  'my-opencalais-api-key'
 
-      d1 =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/world-africa-24412315')
-      d2 =  DoverToCalais::Dover.new('/home/fred/Documents/RailsRecipes.pdf')
-      d3 =  DoverToCalais::Dover.new('//network-drive/annual_forecast.doc')
+  d1 =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/world-africa-24412315')
+  d2 =  DoverToCalais::Dover.new('/home/fred/Documents/RailsRecipes.pdf')
+  d3 =  DoverToCalais::Dover.new('//network-drive/annual_forecast.doc')
 
-      puts 'do some stuff....'
+  puts 'do some stuff....'
 
-      d1.to_calais { |response| puts response.error ? response.error : response }
-      d2.to_calais { |response| puts response.error ? response.error : response }
-      d3.to_calais { |response| puts response.error ? response.error : response }
+  d1.to_calais { |response| puts response.error ? response.error : response }
+  d2.to_calais { |response| puts response.error ? response.error : response }
+  d3.to_calais { |response| puts response.error ? response.error : response }
 
-      puts 'do some stuff....'
+  puts 'do some stuff....'
 
-
-    end
-    ```
+end
+```
 
 This will output the two *puts* statements followed by the three callbacks (d1, d2, d3) in the order in which they are triggered, i.e. the first callback to receive a response from OpenCalais will fire first.
 
 
 ###Filtering the response
 Why parse the response XML ourselves when DoverToCalais can do it for us? We'll just use the *#filter* method on the response object, passing a filtering hash:  
-     ```ruby
+ ```ruby
      my_filter = {:entity => 'Entity1', :value => 'Value1', :given => {:entity => 'Entity2', , :value => 'Value2'}}
      reponse.filter(my_filter)
-     ```
+ ```
 
 The above tells DoverToCalais to look in the reponse for an entity called 'Entity1' with a value of 'Value1', **only** if the response contains an entity called 'Entity2' which has a value of 'Value2'.
 
 The conditional clause (*:given*) is optional; the filtering hash can be used in pretty much any permutation.  For instance: 
-    ```ruby
-    EM.run do
+```ruby
+EM.run do
 
-      DoverToCalais::API_KEY =  'my-opencalais-api-key'
+    DoverToCalais::API_KEY =  'my-opencalais-api-key'
 
-      dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/world-africa-24412315')
+    dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/world-africa-24412315')
 
-      dover.to_calais do |response|
-        if   response.error
-          puts  response.error
-        else
-          puts response.filter({:entity => 'Company'})
-        end
-      end
-
+    dover.to_calais do |response|
+    if   response.error
+      puts  response.error
+    else
+      puts response.filter({:entity => 'Company'})
     end
-    ```
+    end
+
+end
+```
 
 This will pick out all entities tagged 'Company' from the data source. The output will be an Array of ResponseItem objects. 
 
-<div class="output">
+
 &lt;struct DoverToCalais::ResponseItem name="Company", value="BBC News", relevance=0.654, count=13, normalized=nil, importance=nil, originalValue=nil&gt;<br>  
 &lt;struct DoverToCalais::ResponseItem name="Company", value="TV Radio", relevance=0.565, count=2, normalized="HERALD & WEEKLY-TV,RADIO OPS", importance=nil, originalValue=nil&gt;  <br>
 &lt;struct DoverToCalais::ResponseItem name="Company", value="Reuters", relevance=0.255, count=2, normalized="THOMSON REUTERS GROUP LIMITED", importance=nil, originalValue=nil&gt;  <br>
@@ -173,35 +172,35 @@ This will pick out all entities tagged 'Company' from the data source. The outpu
 &lt;struct DoverToCalais::ResponseItem name="Company", value="Huffington Post UK", relevance=0.136, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br> 
 &lt;struct DoverToCalais::ResponseItem name="Company", value="Ireland Kenya", relevance=0.144, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br> 
 &lt;struct DoverToCalais::ResponseItem name="Company", value="Yahoo! UK", relevance=0.144, count=1, normalized="YAHOO! UK LIMITED", importance=nil, originalValue=nil&gt; <br>
-</div> 
+
 
 
 
 If this output looks a bit cluttered, we can easily tidy it up:
-    ```ruby
-    EM.run do
+```ruby
+EM.run do
 
-      DoverToCalais::API_KEY =  'my-opencalais-api-key'
+  DoverToCalais::API_KEY =  'my-opencalais-api-key'
 
-      dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/world-africa-24412315')
+  dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/world-africa-24412315')
 
-      dover.to_calais do |response|
-        if   response.error
-          puts  response.error
-        else
-          items = response.filter({:entity => 'Company'})
-          items.each do |item|
-            puts "#{item.name}: #{item.value}, relevance = #{item.relevance}"
-          end
-        end
+  dover.to_calais do |response|
+    if   response.error
+      puts  response.error
+    else
+      items = response.filter({:entity => 'Company'})
+      items.each do |item|
+        puts "#{item.name}: #{item.value}, relevance = #{item.relevance}"
       end
-
     end
-    ```
+  end
+
+end
+```
 
 Which will give us:
 
-<div class="output">
+
 Company: BBC News, relevance = 0.656  <br>
 Company: TV Radio, relevance = 0.566  <br>
 Company: Reuters, relevance = 0.26  <br>
@@ -210,58 +209,58 @@ Company: Twitter, relevance = 0.399  <br>
 Company: Huffington Post UK, relevance = 0.132  <br>
 Company: Ireland Kenya, relevance = 0.139  <br>
 Company: Yahoo! UK, relevance = 0.139  <br>
-</div> 
+
 
 
 Let's see if the data source refers to any business partnerships: 
-    ```ruby
-    EM.run do
+```ruby
+EM.run do
 
-      DoverToCalais::API_KEY =  'my-opencalais-api-key'
+  DoverToCalais::API_KEY =  'my-opencalais-api-key'
 
-      dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/technology-24380202')
+  dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/technology-24380202')
 
-      dover.to_calais do |response|
-        if   response.error
-          puts  response.error
-        else
-          items = response.filter({:entity => 'Event', :value => 'Business Partnership'})
-          puts "There are #{items.length} events like that in the source"
-        end
-      end
-
+  dover.to_calais do |response|
+    if   response.error
+      puts  response.error
+    else
+      items = response.filter({:entity => 'Event', :value => 'Business Partnership'})
+      puts "There are #{items.length} events like that in the source"
     end
-    ```
+  end
+
+end
+```
 
 which will produce:
-<div class="output">
+
 There are 1 events like that in the source
-</div> 
+
 
 Now let's find all companies involved in any business partnerships:
-    ```ruby
-    EM.run do
+```ruby
+EM.run do
 
-      DoverToCalais::API_KEY =  'my-opencalais-api-key'
+  DoverToCalais::API_KEY =  'my-opencalais-api-key'
 
-      dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/technology-24380202')
+  dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/technology-24380202')
 
-      dover.to_calais do |response|
-        if   response.error
-          puts  response.error
-        else
-          items = response.filter( {:entity => 'Company', :given => {:entity => 'Event',  :value => 'Business Partnership'}} )
-          items.each do |item|
-            puts "#{item.name}: #{item.value} a.k.a #{item.normalized}, relevance = #{item.relevance}"
-          end
-        end
+  dover.to_calais do |response|
+    if   response.error
+      puts  response.error
+    else
+      items = response.filter( {:entity => 'Company', :given => {:entity => 'Event',  :value => 'Business Partnership'}} )
+      items.each do |item|
+        puts "#{item.name}: #{item.value} a.k.a #{item.normalized}, relevance = #{item.relevance}"
       end
-
     end
-    ```
+  end
+
+end
+```
 
 which gives:
-<div class="output">
+
 Company: BBC News a.k.a , relevance = 0.678 <br>
 Company: Google a.k.a GOOGLE INC., relevance = 0.508 <br>
 Company: Flutter a.k.a FLUTTER COM INC, relevance = 0.531 <br>
@@ -273,73 +272,76 @@ Company: Y Combinator a.k.a Y Combinator, relevance = 0.258 <br>
 Company: Nintendo a.k.a Nintendo Co., Ltd., relevance = 0.286 <br>
 Company: Samsung a.k.a Samsung C&T Corporation, relevance = 0.285 <br>
 Company: Glyndwr University a.k.a , relevance = 0.269 <br>
-</div> 
+
 
 
 At this point, someone may ask: "But what if we want to get more than one entity for a given condition? The filter hash doesn't allow that!"
 
 No it doesn't. However, given that filtering is done on the *whole* reponse *after* it's been received, we can apply many filters on the same response:
 
-    ```ruby
-    EM.run do
+```ruby
+EM.run do
 
-      DoverToCalais::API_KEY =  'my-opencalais-api-key'
+  DoverToCalais::API_KEY =  'my-opencalais-api-key'
 
-      dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/technology-24380202')
+  dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/technology-24380202')
 
-      dover.to_calais do |response|
-        if   response.error
-          puts  response.error
-        else
-          result1 = response.filter( {:entity => 'Company', :value => 'Google', :given => {:entity => 'Technology',  :value => 'gesture recognition'}} )
-          result2 = response.filter( {:entity => 'Product', :given => {:entity => 'Technology',  :value => 'gesture recognition'}} )
-          puts result1 | result2
-        end
-      end
-
+  dover.to_calais do |response|
+    if   response.error
+      puts  response.error
+    else
+      result1 = response.filter( {:entity => 'Company', :value => 'Google', :given => {:entity => 'Technology',  :value => 'gesture recognition'}} )
+      result2 = response.filter( {:entity => 'Product', :given => {:entity => 'Technology',  :value => 'gesture recognition'}} )
+      puts result1 | result2
     end
-    ```
+  end
+
+end
+```
 
 Which will give us all the gesture-recognition products that Google is associated with according to our data source: 
-<div class="output">
+
 &lt;struct DoverToCalais::ResponseItem name="Company", value="Google", relevance=0.506, count=7, normalized="GOOGLE INC.", importance=nil, originalValue=nil&gt; <br>
 &lt;struct DoverToCalais::ResponseItem name="Product", value="Xbox Kinect", relevance=0.286, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br>
 &lt;struct DoverToCalais::ResponseItem name="Product", value="Galaxy S4 smartphone", relevance=0.282, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br>
 &lt;struct DoverToCalais::ResponseItem name="Product", value="Wii", relevance=0.286, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br>
 &lt;struct DoverToCalais::ResponseItem name="Product", value="Galaxy S4", relevance=0.282, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br>
-</div>
+
 
 
 
 ***PS***: If you're not sure about the names or values of the tags you want to filter, you can get a listing with the following Constants: 
-
-    CalaisOntology::CALAIS_ENTITIES
-    CalaisOntology::CALAIS_EVENTS
-    CalaisOntology::CALAIS_TOPICS
-
+```ruby
+CalaisOntology::CALAIS_ENTITIES
+CalaisOntology::CALAIS_EVENTS
+CalaisOntology::CALAIS_TOPICS
+```
 
 
 ### Using a Proxy
 
 If you're behind a corporate firewall and the only way to reach outside is through a proxy then you need to set the *DoverToCalais::PROXY* constant:
 
+```ruby
     DoverToCalais::PROXY = 
         :proxy => {
            :host => 'www.myproxy.com',
            :port => 8080,
            :authorization => ['username', 'password'] #optional
         }
+```
 
 
 If you're connecting through a SOCKS5 Proxy just set the *:type* key to :socks5.
 
+```ruby
     DoverToCalais::PROXY = 
         :proxy => {
            :host => 'www.myproxy.com',
            :port => 8080,
            :type => :socks5
         }
-
+```
 
 ## Contributing
 
