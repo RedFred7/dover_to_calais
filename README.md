@@ -90,23 +90,25 @@ EM.run do
 
     dover.to_calais { |response| puts response.error ? response.error : response }
 
-    puts 'do some stuff....'
+    puts 'do some more stuff....'
 
 end
 ```
 This will produce the following result:
 
-do some stuff....  
-do some more stuff....  
-&lt;?xml version="1.0"?&gt;  
-&lt;OpenCalaisSimple&gt;   
-..........
-(the rest of the XML response from OpenCalais) 
+
+> do some stuff....
+> do some more stuff....
+> &lt;?xml version="1.0"?&gt;
+> &lt;OpenCalaisSimple&gt;
+> ..........
+> (the rest of the XML response from OpenCalais)
 
 
 As can be observed, the callback (#to_calais) is trigerred after the rest of the code has been executed and only when the OpenCalais request has been completed.
 
 Of course, we can analyse more than one sources at a time:
+
 ```ruby
 EM.run do
 
@@ -126,7 +128,7 @@ EM.run do
   d2.to_calais { |response| puts response.error ? response.error : response }
   d3.to_calais { |response| puts response.error ? response.error : response }
 
-  puts 'do some stuff....'
+  puts 'do some more stuff....'
 
 end
 ```
@@ -135,7 +137,8 @@ This will output the two *puts* statements followed by the three callbacks (d1, 
 
 
 ###Filtering the response
-Why parse the response XML ourselves when DoverToCalais can do it for us? We'll just use the *#filter* method on the response object, passing a filtering hash:  
+Why parse the response XML ourselves when DoverToCalais can do it for us? We'll just use the *#filter* method on the response object, passing a filtering hash:
+
  ```ruby
      my_filter = {:entity => 'Entity1', :value => 'Value1', :given => {:entity => 'Entity2', , :value => 'Value2'}}
      reponse.filter(my_filter)
@@ -143,7 +146,8 @@ Why parse the response XML ourselves when DoverToCalais can do it for us? We'll 
 
 The above tells DoverToCalais to look in the reponse for an entity called 'Entity1' with a value of 'Value1', **only** if the response contains an entity called 'Entity2' which has a value of 'Value2'.
 
-The conditional clause (*:given*) is optional; the filtering hash can be used in pretty much any permutation.  For instance: 
+The conditional clause (*:given*) is optional; the filtering hash can be used in pretty much any permutation.  For instance:
+
 ```ruby
 EM.run do
 
@@ -174,9 +178,8 @@ This will pick out all entities tagged 'Company' from the data source. The outpu
 &lt;struct DoverToCalais::ResponseItem name="Company", value="Yahoo! UK", relevance=0.144, count=1, normalized="YAHOO! UK LIMITED", importance=nil, originalValue=nil&gt; <br>
 
 
-
-
 If this output looks a bit cluttered, we can easily tidy it up:
+
 ```ruby
 EM.run do
 
@@ -212,7 +215,8 @@ Company: Yahoo! UK, relevance = 0.139  <br>
 
 
 
-Let's see if the data source refers to any business partnerships: 
+Let's see if the data source refers to any business partnerships:
+
 ```ruby
 EM.run do
 
@@ -238,6 +242,7 @@ There are 1 events like that in the source
 
 
 Now let's find all companies involved in any business partnerships:
+
 ```ruby
 EM.run do
 
@@ -259,7 +264,7 @@ EM.run do
 end
 ```
 
-which gives:
+which gives us:
 
 Company: BBC News a.k.a , relevance = 0.678 <br>
 Company: Google a.k.a GOOGLE INC., relevance = 0.508 <br>
@@ -310,7 +315,8 @@ Which will give us all the gesture-recognition products that Google is associate
 
 
 
-***PS***: If you're not sure about the names or values of the tags you want to filter, you can get a listing with the following Constants: 
+***PS***: If you're not sure about the names or values of the tags you want to filter, you can get a listing with the following Constants:
+
 ```ruby
 CalaisOntology::CALAIS_ENTITIES
 CalaisOntology::CALAIS_EVENTS

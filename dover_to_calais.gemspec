@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
                           the inputs. In addition, DoverToCalais enables the filtering of the response in order to
                           find relevant tags and/or tag values. }
   spec.summary       = %q{An easy-to-use wrapper round the OpenCalais semantic analysis web service. }
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/RedFred7/dover_to_calais"
   spec.license       = "MIT"
 
 
