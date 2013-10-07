@@ -76,26 +76,24 @@ As [Yomu](https://github.com/Erol/yomu) depends on a working JRE in order to fun
 
 As DoverToCalais uses the awesome-ness of [EventMachine](http://rubyeventmachine.com/), code must be placed within an EM *run* block:
 
-    ```ruby
-    EM.run do
+```ruby
+EM.run do
 
-      # use Control + C to stop the EM
-      Signal.trap('INT')  { EventMachine.stop }
-      Signal.trap('TERM') { EventMachine.stop }
+# use Control + C to stop the EM
+Signal.trap('INT')  { EventMachine.stop }
+Signal.trap('TERM') { EventMachine.stop }
 
-      DoverToCalais::API_KEY =  'my-opencalais-api-key'
+DoverToCalais::API_KEY =  'my-opencalais-api-key'
+dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/world-africa-24412315')
 
-      dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/world-africa-24412315')
+puts 'do some stuff....'
 
-      puts 'do some stuff....'
+dover.to_calais { |response| puts response.error ? response.error : response }
 
-      dover.to_calais { |response| puts response.error ? response.error : response }
+puts 'do some stuff....'
 
-      puts 'do some stuff....'
-
-
-    end
-    ```
+end
+```
 This will produce the following result:
 <div class="output">
 do some stuff....  
