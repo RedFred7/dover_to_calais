@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "dover_to_calais"
   spec.version       = DoverToCalais::VERSION
   spec.authors       = ["Fred Heath"]
-  spec.email         = ["fred@bootstrap.me.uk"]
+  spec.email         = ["fred_h@bootstrap.me.uk"]
   spec.description   = %q{DoverToCalais allows the user to send a wide range of data sources (files & URLs)
                           to OpenCalais and receive asynchronous responses when OpenCalais has finished processing
                           the inputs. In addition, DoverToCalais enables the filtering of the response in order to
@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "em-http-request", "~>1.1.0"
   spec.add_runtime_dependency "yomu", "~>0.1.9"
 
+
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
@@ -30,4 +31,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
+  spec.add_development_dependency "cucumber", "~>1.3.8"
+  spec.add_development_dependency "rspec", "~>2.14.1"
 end

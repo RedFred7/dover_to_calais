@@ -63,8 +63,10 @@ Or install it yourself as:
 
     $ gem install dover_to_calais
 
+
+
 ## Dependencies
-DoverToCalais has been developed in Ruby 1.9.3 and relies on the following gems (for development purposes only, installation with the gem command will automatically install all dependencies)
+DoverToCalais has been developed in Ruby 1.9.3 and relies on the following gems to work (installation with the gem command will automatically install all dependencies)
 
  * 'nokogiri', 1.6.0
  * 'eventmachine', 1.0.3
@@ -107,6 +109,8 @@ do some more stuff....
 (the rest of the XML response from OpenCalais) 
 </div>
 
+As can be observed, the callback (#to_calais) is trigerred after the rest of the code has been executed and only when the OpenCalais request has been completed.
+
 Of course, we can analyse more than one sources at a time:
 
     EM.run do
@@ -136,7 +140,7 @@ This will output the two *puts* statements followed by the three callbacks (d1, 
 
 
 ###Filtering the response
-Why parse the response XML yourself when DoverToCalais can do it for you? Just use the *#filter* method on the response object, passing a filtering hash:  
+Why parse the response XML ourselves when DoverToCalais can do it for us? We'll just use the *#filter* method on the response object, passing a filtering hash:  
  
      my_filter = {:entity => 'Entity1', :value => 'Value1', :given => {:entity => 'Entity2', , :value => 'Value2'}}
      reponse.filter(my_filter)
@@ -175,7 +179,7 @@ This will pick out all entities tagged 'Company' from the data source. The outpu
 
 
 
-But we can produce some clearer output:
+If this output looks a bit cluttered, we can easily tidy it up:
 
     EM.run do
 
@@ -273,7 +277,7 @@ Company: Glyndwr University a.k.a , relevance = 0.269 <br>
 
 At this point, someone may ask: "But what if we want to get more than one entity for a given condition? The filter hash doesn't allow that!"
 
-No it doesn't. However, given that filtering is done on the *whole* reponse *after* it's been received, we can quite  easily do this:
+No it doesn't. However, given that filtering is done on the *whole* reponse *after* it's been received, we can apply many filters on the same response:
 
 
     EM.run do
@@ -294,7 +298,7 @@ No it doesn't. However, given that filtering is done on the *whole* reponse *aft
 
     end
 
-Which will give us all the gesture-recognition products that Google is somehow associated with: 
+Which will give us all the gesture-recognition products that Google is associated with according to our data source: 
 <div class="output">
 &lt;struct DoverToCalais::ResponseItem name="Company", value="Google", relevance=0.506, count=7, normalized="GOOGLE INC.", importance=nil, originalValue=nil&gt; <br>
 &lt;struct DoverToCalais::ResponseItem name="Product", value="Xbox Kinect", relevance=0.286, count=1, normalized=nil, importance=nil, originalValue=nil&gt; <br>
@@ -341,3 +345,10 @@ If you're connecting through a SOCKS5 Proxy just set the *:type* key to :socks5.
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+
+##Changelog
+
+   * **07-Oct-2013** Version: 0.1.0  
+Initial release
+
