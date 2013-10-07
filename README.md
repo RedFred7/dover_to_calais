@@ -1,9 +1,4 @@
-<head>
-<style>
-.output {color:sienna; font-size:0.875em;font-family:"Times New Roman",Georgia,Serif;}
 
-</style>
-</head>
 
 # DoverToCalais
 
@@ -81,6 +76,7 @@ As [Yomu](https://github.com/Erol/yomu) depends on a working JRE in order to fun
 
 As DoverToCalais uses the awesome-ness of [EventMachine](http://rubyeventmachine.com/), code must be placed within an EM *run* block:
 
+    ```ruby
     EM.run do
 
       # use Control + C to stop the EM
@@ -99,6 +95,7 @@ As DoverToCalais uses the awesome-ness of [EventMachine](http://rubyeventmachine
 
 
     end
+    ```
 This will produce the following result:
 <div class="output">
 do some stuff....  
@@ -112,7 +109,7 @@ do some more stuff....
 As can be observed, the callback (#to_calais) is trigerred after the rest of the code has been executed and only when the OpenCalais request has been completed.
 
 Of course, we can analyse more than one sources at a time:
-
+    ```ruby
     EM.run do
 
       # use Control + C to stop the EM
@@ -135,20 +132,22 @@ Of course, we can analyse more than one sources at a time:
 
 
     end
+    ```
 
 This will output the two *puts* statements followed by the three callbacks (d1, d2, d3) in the order in which they are triggered, i.e. the first callback to receive a response from OpenCalais will fire first.
 
 
 ###Filtering the response
 Why parse the response XML ourselves when DoverToCalais can do it for us? We'll just use the *#filter* method on the response object, passing a filtering hash:  
- 
+     ```ruby
      my_filter = {:entity => 'Entity1', :value => 'Value1', :given => {:entity => 'Entity2', , :value => 'Value2'}}
      reponse.filter(my_filter)
+     ```
 
 The above tells DoverToCalais to look in the reponse for an entity called 'Entity1' with a value of 'Value1', **only** if the response contains an entity called 'Entity2' which has a value of 'Value2'.
 
 The conditional clause (*:given*) is optional; the filtering hash can be used in pretty much any permutation.  For instance: 
-
+    ```ruby
     EM.run do
 
       DoverToCalais::API_KEY =  'my-opencalais-api-key'
@@ -164,6 +163,7 @@ The conditional clause (*:given*) is optional; the filtering hash can be used in
       end
 
     end
+    ```
 
 This will pick out all entities tagged 'Company' from the data source. The output will be an Array of ResponseItem objects. 
 
@@ -180,7 +180,7 @@ This will pick out all entities tagged 'Company' from the data source. The outpu
 
 
 If this output looks a bit cluttered, we can easily tidy it up:
-
+    ```ruby
     EM.run do
 
       DoverToCalais::API_KEY =  'my-opencalais-api-key'
@@ -199,6 +199,7 @@ If this output looks a bit cluttered, we can easily tidy it up:
       end
 
     end
+    ```
 
 Which will give us:
 
@@ -215,7 +216,7 @@ Company: Yahoo! UK, relevance = 0.139  <br>
 
 
 Let's see if the data source refers to any business partnerships: 
-
+    ```ruby
     EM.run do
 
       DoverToCalais::API_KEY =  'my-opencalais-api-key'
@@ -232,6 +233,7 @@ Let's see if the data source refers to any business partnerships:
       end
 
     end
+    ```
 
 which will produce:
 <div class="output">
@@ -239,7 +241,7 @@ There are 1 events like that in the source
 </div> 
 
 Now let's find all companies involved in any business partnerships:
-
+    ```ruby
     EM.run do
 
       DoverToCalais::API_KEY =  'my-opencalais-api-key'
@@ -258,6 +260,7 @@ Now let's find all companies involved in any business partnerships:
       end
 
     end
+    ```
 
 which gives:
 <div class="output">
@@ -279,7 +282,7 @@ At this point, someone may ask: "But what if we want to get more than one entity
 
 No it doesn't. However, given that filtering is done on the *whole* reponse *after* it's been received, we can apply many filters on the same response:
 
-
+    ```ruby
     EM.run do
 
       DoverToCalais::API_KEY =  'my-opencalais-api-key'
@@ -297,6 +300,7 @@ No it doesn't. However, given that filtering is done on the *whole* reponse *aft
       end
 
     end
+    ```
 
 Which will give us all the gesture-recognition products that Google is associated with according to our data source: 
 <div class="output">
@@ -327,6 +331,7 @@ If you're behind a corporate firewall and the only way to reach outside is throu
            :port => 8080,
            :authorization => ['username', 'password'] #optional
         }
+
 
 If you're connecting through a SOCKS5 Proxy just set the *:type* key to :socks5.
 
