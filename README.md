@@ -351,13 +351,13 @@ If you're connecting through a SOCKS5 Proxy just set the *:type* key to :socks5.
 
 ## Documentation
 
-Comprehensive documentation can be found [http://rubydoc.info/gems/dover_to_calais](here)
+Comprehensive documentation can be found at http://rubydoc.info/gems/dover_to_calais.
 
 ## Testing 
 
-A list of Cucumber feaures and scenarios can be found in the *features* directory. The list is far from exhaustive, so feel free to add your own scenarios and steps
+A list of Cucumber features and scenarios can be found in the *features* directory. The list is far from exhaustive, so feel free to add your own scenarios and steps.
 
-To run the tests, there is already a rake task set up. Just type: 
+To run the tests, there is already a rake task set up. Just type:
 
     rake features API_KEY='my_api_key'
 
