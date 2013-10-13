@@ -140,7 +140,7 @@ This will output the two *puts* statements followed by the three callbacks (d1, 
 Why parse the response XML ourselves when DoverToCalais can do it for us? We'll just use the *#filter* method on the response object, passing a filtering hash:
 
  ```ruby
-     my_filter = {:entity => 'Entity1', :value => 'Value1', :given => {:entity => 'Entity2', , :value => 'Value2'}}
+     my_filter = {:entity => 'Entity1', :value => 'Value1', :given => {:entity => 'Entity2', :value => 'Value2'}}
      reponse.filter(my_filter)
  ```
 
@@ -322,6 +322,14 @@ CalaisOntology::CALAIS_ENTITIES
 CalaisOntology::CALAIS_EVENTS
 CalaisOntology::CALAIS_TOPICS
 ```
+
+###Code samples
+
+More examples of using DoverToCalais can be found as GitHub Gists:
+
+[Using DoverToCalais to semantically tag all files in a directory](https://gist.github.com/RedFred7/6961349)
+[Use DoverToCalais to find all Persons or Organizations with a relevance score greater than 0.1, if the data source contains an environmental event](https://gist.github.com/RedFred7/6961853)
+
 
 
 ### Using a Proxy
