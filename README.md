@@ -71,9 +71,9 @@ DoverToCalais has been developed in Ruby 1.9.3 and relies on the following gems 
 As [Yomu](https://github.com/Erol/yomu) depends on a working JRE in order to function, so does DoverToCalais.
 
 ## Usage
+Using DoverToCalais is extremely simple.
 
 ### The Basics
-
 As DoverToCalais uses the awesome-ness of [EventMachine](http://rubyeventmachine.com/), code must be placed within an EM *run* block:
 
 ```ruby
@@ -327,9 +327,8 @@ CalaisOntology::CALAIS_TOPICS
 
 More examples of using DoverToCalais can be found as GitHub Gists:
 
-[Using DoverToCalais to semantically tag all files in a directory](https://gist.github.com/RedFred7/6961349)
-[Use DoverToCalais to find all Persons or Organizations with a relevance score greater than 0.1, if the data source contains an environmental event](https://gist.github.com/RedFred7/6961853)
-
+[Using DoverToCalais to semantically tag all files in a directory](https://gist.github.com/RedFred7/6961349)  
+[Use DoverToCalais to find all Persons or Organizations with a relevance score greater than 0.1, if the data source contains an environmental event](https://gist.github.com/RedFred7/6961853)  
 
 
 ### Using a Proxy
