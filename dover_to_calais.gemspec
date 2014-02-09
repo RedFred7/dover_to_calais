@@ -17,10 +17,10 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
 
 
-  spec.add_runtime_dependency "nokogiri", "~>1.6.0"
-  spec.add_runtime_dependency "eventmachine", "~>1.0.3"
-  spec.add_runtime_dependency "em-http-request", "~>1.1.0"
-  spec.add_runtime_dependency "yomu", "~>0.1.9"
+  spec.add_runtime_dependency "nokogiri", "~> 1.6"
+  spec.add_runtime_dependency "eventmachine", "~> 1.0", ">= 1.0.3"
+  spec.add_runtime_dependency "em-http-request", "~> 1.1"
+  spec.add_runtime_dependency "yomu", "~> 0.1", ">= 0.1.9"
 
 
   spec.files         = `git ls-files`.split($/)
@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
 
 
   spec.add_development_dependency "bundler", "~> 1.3"
-  spec.add_development_dependency "rake"
-  spec.add_development_dependency "cucumber", "~>1.3.8"
-  spec.add_development_dependency "rspec", "~>2.14.1"
+  spec.add_development_dependency "rake", "~> 0"
+  spec.add_development_dependency "cucumber", "~> 1.3", ">= 1.3.8"
+  spec.add_development_dependency "rspec", "~> 2.14", ">= 2.14.1"
 end
