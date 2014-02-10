@@ -391,4 +391,7 @@ To run the tests, there is already a rake task set up. Just type:
 
    * **07-Oct-2013** Version: 0.1.0  
 Initial release
-
+   * **10-Feb-2014** Version: 0.1.1 
+Improved Response error message
+   * **10-Feb-2014** Version: 0.2.0  
+Added #analyse_this to public interface
