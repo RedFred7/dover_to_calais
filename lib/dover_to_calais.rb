@@ -287,6 +287,7 @@ module DoverToCalais
     end  #method
 
 
+    alias_method :analyze_this, :analyse_this
     public :to_calais, :analyse_this
     private :get_src_data
 
