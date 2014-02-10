@@ -218,7 +218,6 @@ module DoverToCalais
       @document = get_src_data(@data_src)
       begin
         if @document[0..2].eql?('ERR')
-         # puts  @document
           raise 'Invalid data source'
         else
           response = nil
@@ -242,27 +241,35 @@ module DoverToCalais
                   :outputFormat => 'Text/Simple'}
           }
 
+
           http = EventMachine::HttpRequest.new(CALAIS_SERVICE, connection_options ).post request_options
 
 
           http.callback do
-            http.response.match(/<OpenCalaisSimple>/) do |m|
-              response = Nokogiri::XML('<OpenCalaisSimple>' + m.post_match)  do |config|
-                #strict xml parsing, disallow network connections
-                config.strict.nonet
-              end #block
-            end #block
 
-            result =   response ?
-                      ResponseData.new(response, nil) :
-                      ResponseData.new(nil,'ERR: cannot find <OpenCalaisSimple> tag in response data - source invalid?')
+            if http.response_header.status == 200
+              http.response.match(/<OpenCalaisSimple>/) do |m|
+                response = Nokogiri::XML('<OpenCalaisSimple>' + m.post_match)  do |config|
+                  #strict xml parsing, disallow network connections
+                  config.strict.nonet
+                end #block
+              end #block
+
+              result =   response ?
+                        ResponseData.new(response, nil) :
+                        ResponseData.new(nil,'ERR: cannot find <OpenCalaisSimple> tag in response data - source invalid?')
+            else #non-200 response header
+              result = ResponseData.new nil, 
+                            "ERR: OpenCalais service responded with #{http.response_header.status} - response body: '#{http.response}'"
+            end 
+
             @callbacks.each { |c| c.call(result) }
+
           end  #callback
 
 
           http.errback do
-
-            result = ResponseData.new nil, "#{http.error}"
+            result = ResponseData.new nil, "ERR: #{http.error}"
             @callbacks.each { |c| c.call(result) }
           end  #errback
 
