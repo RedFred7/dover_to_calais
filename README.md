@@ -83,11 +83,14 @@ EM.run do
     Signal.trap('INT')  { EventMachine.stop }
     Signal.trap('TERM') { EventMachine.stop }
 
+    # we need an API key to use OpenCalais
     DoverToCalais::API_KEY =  'my-opencalais-api-key'
+    # create a new dover
     dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/world-africa-24412315')
-
+    # parse the text and send it to OpenCalais
+    dover.analyse_this
     puts 'do some stuff....'
-
+    # set a callback for when we receive a response
     dover.to_calais { |response| puts response.error ? response.error : response }
 
     puts 'do some more stuff....'
@@ -122,6 +125,8 @@ EM.run do
   d2 =  DoverToCalais::Dover.new('/home/fred/Documents/RailsRecipes.pdf')
   d3 =  DoverToCalais::Dover.new('//network-drive/annual_forecast.doc')
 
+  d1.analyse_this; d2.analyse_this; d3.analyse_this; 
+
   puts 'do some stuff....'
 
   d1.to_calais { |response| puts response.error ? response.error : response }
@@ -154,6 +159,7 @@ EM.run do
     DoverToCalais::API_KEY =  'my-opencalais-api-key'
 
     dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/world-africa-24412315')
+    dover.analyse_this
 
     dover.to_calais do |response|
     if   response.error
@@ -186,6 +192,7 @@ EM.run do
   DoverToCalais::API_KEY =  'my-opencalais-api-key'
 
   dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/world-africa-24412315')
+  dover.analyse_this
 
   dover.to_calais do |response|
     if   response.error
@@ -223,6 +230,7 @@ EM.run do
   DoverToCalais::API_KEY =  'my-opencalais-api-key'
 
   dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/technology-24380202')
+  dover.analyse_this
 
   dover.to_calais do |response|
     if   response.error
@@ -249,6 +257,7 @@ EM.run do
   DoverToCalais::API_KEY =  'my-opencalais-api-key'
 
   dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/technology-24380202')
+  dover.analyse_this
 
   dover.to_calais do |response|
     if   response.error
@@ -290,6 +299,7 @@ EM.run do
   DoverToCalais::API_KEY =  'my-opencalais-api-key'
 
   dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/technology-24380202')
+  dover.analyse_this
 
   dover.to_calais do |response|
     if   response.error

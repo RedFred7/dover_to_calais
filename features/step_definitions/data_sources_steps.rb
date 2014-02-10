@@ -24,6 +24,7 @@ When(/^DoverToCalais processes this file$/) do
 
     DoverToCalais::API_KEY =  ENV['API_KEY']
     d1 =  DoverToCalais::Dover.new(@input)
+    d1.analyse_this
     d1.to_calais do |response|
       @output = response
       EM.stop

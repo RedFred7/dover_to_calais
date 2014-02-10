@@ -173,7 +173,6 @@ module DoverToCalais
     def initialize(data_src)
       @data_src = data_src
       @callbacks = []
-      analyse_this
     end
 
 
@@ -212,7 +211,12 @@ module DoverToCalais
 
     end #method
 
+    # Gets the source text parsed. If the parsing is successful, the data source is POSTed to OpenCalais
+    # via an EventMachine request and a callback is set to manage the OpenCalais response.
+    # All Dover object callbacks are then called with the request result yielded to them. 
     #
+    # @param N/A
+    # @return a {Class ResponseData} object
     def analyse_this
 
       @document = get_src_data(@data_src)
@@ -240,7 +244,6 @@ module DoverToCalais
                   :enableMetadataType => 'GenericRelations,SocialTags',
                   :outputFormat => 'Text/Simple'}
           }
-
 
           http = EventMachine::HttpRequest.new(CALAIS_SERVICE, connection_options ).post request_options
 
@@ -284,8 +287,8 @@ module DoverToCalais
     end  #method
 
 
-    public :to_calais
-    private :get_src_data, :analyse_this
+    public :to_calais, :analyse_this
+    private :get_src_data
 
 
   end  #class
