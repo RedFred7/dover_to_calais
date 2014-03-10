@@ -3,27 +3,31 @@ require 'eventmachine'
 require 'em-http-request'
 require 'yomu'
 require 'rspec'
-require File.expand_path('../../../lib/dover_to_calais', __FILE__)
-
+#require File.expand_path('../../../lib/dover_to_calais', __FILE__)
+require_relative '../../lib/dover_to_calais'
 
 # N.B Cucumber must be run with the Environment variable 'API_KEY' set
 # to the OpenCalais API Key value.
 
 
 
-Given(/^the file '(\w+\.\w{3,4})' is successfully processed$/) do |file|
+Given(/^the file '(\w+\.\w{3,4})' is successfully processed with the simple output$/) do |file|
 
   steps %{
         Given  the file #{file}
-        When DoverToCalais processes this file
+        When the Output format is set to 'Text/Simple'
+        And DoverToCalais processes this file
         Then the output should have no errors
         }
 
 end
 
 
-When(/^I filter on ({.+})/) do  |filter|
-  @filtered_output = @output.filter(eval(filter))
+
+
+
+When(/^I filter on ({.+})$/) do  |f|
+  @filtered_output = @output.filter(eval(f))
 
 end
 
