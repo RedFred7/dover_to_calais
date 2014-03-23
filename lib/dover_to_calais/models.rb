@@ -12,7 +12,7 @@ module DoverToCalais
 
     index :name
     index :type
-    unique :calais_id
+    index :calais_id
 
     def validate
       assert_present :name
@@ -22,7 +22,7 @@ module DoverToCalais
 
     class RelationModel < Ohm::Model
       include Ohm::DataTypes
-      
+
       attribute :subject, Type::Hash
       attribute :object, Type::Hash
       attribute :verb

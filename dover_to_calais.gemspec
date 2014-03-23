@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "json", "~> 1.5", ">= 1.5.5"
   spec.add_runtime_dependency "ohm", "~> 2.0", ">= 2.0.0"
   spec.add_runtime_dependency "ohm-contrib", "~> 2.0", ">= 2.0.0"
+  spec.add_runtime_dependency "em-throttled_queue", "~> 1.1", ">= 1.1.0"
 
 
   spec.files         = `git ls-files`.split($/)

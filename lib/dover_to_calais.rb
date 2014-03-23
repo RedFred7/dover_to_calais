@@ -7,7 +7,6 @@ require 'em-http-request'
 require 'yomu'
 require 'json'
 require "dover_to_calais/models"  #gem lib file
-require 'daybreak'
 require 'ohm'
 
 
@@ -221,51 +220,58 @@ module DoverToCalais
 
       #for each Entity find all related Relations and Events and store them to Ohm/Redis
       @entities_store.each_pair do |k, v|
-        entity = EntityModel.create(:name => v['name'], :type => v['_type'], :calais_id => k)
-        if entity.save
-          #get all referenced relations
-          find_in_relations(k).each do |obj|
 
-            found_rel = get_relation(obj[0])
-            if found_rel
-
-              found_rel.subject = convert_to_hash(found_rel.subject)
-              found_rel.object = convert_to_hash(found_rel.object)
-
-              relation = EntityModel::RelationModel.create(:subject => found_rel.subject, 
-                                            :object => found_rel.object, 
-                                            :verb => found_rel.verb,
-                                            :detection => found_rel.detection,
-                                             :calais_id => obj[0])
-              entity.relations.add(relation)
-            end #if
-          end #each
-          #get all referenced events
-          find_in_events(k).each do |obj|
-            found_event = get_event(obj[0])
-            attribs = {}
-            if found_event
-
-              found_event.each_pair do |key, val|
-                
-                key = key.to_s.slice(1, key.length-1)
-                attribs[key] = val
-
-              end #block
-
-              event = EntityModel::EventModel.create(:calais_id => obj[0], :info_hash => attribs)
-              entity.events.add(event)
-
-            end #if
-
-          end #each
-
+        entity_set = EntityModel.find(calais_id: k)
+        
+        if entity_set.size > 0 #entity already exists in store
+          entity = entity_set.first
+          k = entity.calais_id
+        else #entity doesn't exist in store
+          entity = EntityModel.create(:name => v['name'], :type => v['_type'], :calais_id => k)
+          entity.save
+        end #if 
           
-        end #if save
 
+            #get all referenced relations
+            find_in_relations(k).each do |obj|
+
+              found_rel = get_relation(obj[0])
+              if found_rel
+
+                found_rel.subject = convert_to_hash(found_rel.subject)
+                found_rel.object = convert_to_hash(found_rel.object)
+
+                relation = EntityModel::RelationModel.create(:subject => found_rel.subject, 
+                                              :object => found_rel.object, 
+                                              :verb => found_rel.verb,
+                                              :detection => found_rel.detection,
+                                               :calais_id => obj[0])
+                entity.relations.add(relation)
+              end #if
+            end #each
+            #get all referenced events
+            find_in_events(k).each do |obj|
+              found_event = get_event(obj[0])
+              attribs = {}
+              if found_event
+
+                found_event.each_pair do |key, val|
+                  
+                  key = key.to_s.slice(1, key.length-1)
+                  attribs[key] = val
+
+                end #block
+
+                event = EntityModel::EventModel.create(:calais_id => obj[0], :info_hash => attribs)
+                entity.events.add(event)
+
+              end #if
+
+            end #each
       end #each_pair
-
     end #method
+
+
 
     # Coverts an attribute to an appropriate Hash
     #
