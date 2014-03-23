@@ -18,7 +18,7 @@ module DoverToCalais
   REDIS = "redis://127.0.0.1:6379/6"
 
   def self.flushdb
-    Ohm.redis = Redic.new("redis://127.0.0.1:6379/6")
+    Ohm.redis = Redic.new(REDIS)
     Ohm.redis.call "FLUSHDB"
   end
 
@@ -216,7 +216,7 @@ module DoverToCalais
       @events_store = results_hash.select{|key, hash| hash["_typeGroup"] == "relations" &&
       hash["_type"] != "GenericRelations"}
 
-      Ohm.redis = Redic.new("redis://127.0.0.1:6379/6")
+      Ohm.redis = Redic.new(REDIS)
 
 
       #for each Entity find all related Relations and Events and store them to Ohm/Redis
