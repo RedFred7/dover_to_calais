@@ -1,23 +1,3 @@
-#  ontology.rb
-#  
-#  Copyright 2013 Fred <fred@fred-Veriton-X270>
-#  
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#  
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#  
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-#  MA 02110-1301, USA.
-#  
-#  
 
 
 module CalaisOntology
@@ -67,25 +47,38 @@ CALAIS_EVENTS = %w(
     Alliance
     AnalystEarningsEstimate
     AnalystRecommendation
+    ArmedAttack
+    ArmsPurchaseSale
     Arrest
     Bankruptcy
     BonusSharesIssuance
     BusinessRelation
     Buybacks
+    CandidatePosition
     CompanyAccountingChange
+    CompanyAffiliates
+    CompanyCompetitor
+    CompanyCustomer
     CompanyEarningsAnnouncement
     CompanyEarningsGuidance
+    CompanyEmployeesNumber
     CompanyExpansion
     CompanyForceMajeure
+    CompanyFounded
     CompanyInvestment
     CompanyLaborIssues
     CompanyLayoffs
     CompanyLegalIssues
+    CompanyLocation
     CompanyListingChange
     CompanyMeeting
     CompanyNameChange
+    CompanyProduct
     CompanyReorganization
     CompanyRestatement
+    CompanyTechnology
+    CompanyUsingProduct
+    CompanyTicker
     ConferenceCall
     Conviction
     CreditRating
@@ -94,19 +87,32 @@ CALAIS_EVENTS = %w(
     DiplomaticRelations
     Dividend
     EmploymentChange
+    EmploymentRelation
     EnvironmentalIssue
+    EquityFinancing
     Extinction
+    FamilyRelation
     FDAPhase
     Indictment
+    IndicesChanges
     IPO
     JointVenture
     ManMadeDisaster
     Merger
+    MilitaryAction
     MovieRelease
     MusicAlbumRelease
     NaturalDisaster
     PatentFiling
     PatentIssuance
+    PersonAttributes
+    PersonCareer
+    PersonCommunication
+    PersonEducation
+    PersonEmailAddress
+    PersonLocation
+    PersonParty
+    PersonRelation
     PersonTravel
     PoliticalEndorsement
     PoliticalRelationship
@@ -114,13 +120,14 @@ CALAIS_EVENTS = %w(
     ProductIssues
     ProductRecall
     ProductRelease
-    SocialTags
+    Quotation
     SecondaryIssuance
-    PersonCommunication
     StockSplit
     Trial
     VotingResult
 )
+
+
 
 CALAIS_TOPICS = %w(
     Business_Finance
