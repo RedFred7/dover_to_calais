@@ -84,7 +84,7 @@ module DoverToCalais
       def to_hash
         a_hash = {}
         self.each_pair do |attr, value|
-          a_hash[attr] =  value 
+          a_hash[attr] =  value
         end
         a_hash
       end
@@ -93,7 +93,7 @@ module DoverToCalais
 
     class GenericRelation< Struct.new(:subject, :verb, :object, :detection)
 
-    end
+    end #class
 
     class Event
 
@@ -116,7 +116,6 @@ module DoverToCalais
 
       def each_pair
         self.instance_variables.each do |a|
-          # dereference(v["relationsubject"]) {|r| gr['subject']  =  r}
           yield a, self.instance_variable_get(a)
         end
       end
@@ -129,25 +128,7 @@ module DoverToCalais
         end
       end
 
-
-      def dereference(ref_key, response_data)
-        found = Entity.new(nil, nil, nil)
-        entities_store = Daybreak::DB.new "entities.db"
-
-        entities_store.keys.each do |entity_type|
-          response_data.entities[entity_type].each_pair do |key, value|
-            if key == ref_key
-              found[:type] = value["_type"]
-              found[:name] = value["name"]
-              found[:ref] = ref_key
-            end
-          end
-        end
-        found
-      end
-
       public :each_pair
-      private :dereference
 
     end #class
 
@@ -187,10 +168,10 @@ module DoverToCalais
     end
 
 
-   
 
-    # The method will first create three Hash instance variables, where it will store the 
-    # Entities, Generic Relations and Events -respectively- from the OpenCalais response. 
+
+    # The method will first create three Hash instance variables, where it will store the
+    # Entities, Generic Relations and Events -respectively- from the OpenCalais response.
     # The key on each Hash instance variable will be the OpenCalais ID and the value will
     # be the values_hash for that ID.
     # Secondly, the method will iterate through each Entity, find all of it's related
@@ -222,52 +203,52 @@ module DoverToCalais
       @entities_store.each_pair do |k, v|
 
         entity_set = EntityModel.find(calais_id: k)
-        
+
         if entity_set.size > 0 #entity already exists in store
           entity = entity_set.first
           k = entity.calais_id
         else #entity doesn't exist in store
           entity = EntityModel.create(:name => v['name'], :type => v['_type'], :calais_id => k)
           entity.save
-        end #if 
-          
+        end #if
 
-            #get all referenced relations
-            find_in_relations(k).each do |obj|
 
-              found_rel = get_relation(obj[0])
-              if found_rel
+        #get all referenced relations
+        find_in_relations(k).each do |obj|
 
-                found_rel.subject = convert_to_hash(found_rel.subject)
-                found_rel.object = convert_to_hash(found_rel.object)
+          found_rel = get_relation(obj[0])
+          if found_rel
 
-                relation = EntityModel::RelationModel.create(:subject => found_rel.subject, 
-                                              :object => found_rel.object, 
-                                              :verb => found_rel.verb,
-                                              :detection => found_rel.detection,
-                                               :calais_id => obj[0])
-                entity.relations.add(relation)
-              end #if
-            end #each
-            #get all referenced events
-            find_in_events(k).each do |obj|
-              found_event = get_event(obj[0])
-              attribs = {}
-              if found_event
+            found_rel.subject = convert_to_hash(found_rel.subject)
+            found_rel.object = convert_to_hash(found_rel.object)
 
-                found_event.each_pair do |key, val|
-                  
-                  key = key.to_s.slice(1, key.length-1)
-                  attribs[key] = val
+            relation = EntityModel::RelationModel.create(:subject => found_rel.subject,
+            :object => found_rel.object,
+            :verb => found_rel.verb,
+            :detection => found_rel.detection,
+            :calais_id => obj[0])
+            entity.relations.add(relation)
+          end #if
+        end #each
+        #get all referenced events
+        find_in_events(k).each do |obj|
+          found_event = get_event(obj[0])
+          attribs = {}
+          if found_event
 
-                end #block
+            found_event.each_pair do |key, val|
 
-                event = EntityModel::EventModel.create(:calais_id => obj[0], :info_hash => attribs)
-                entity.events.add(event)
+              key = key.to_s.slice(1, key.length-1)
+              attribs[key] = val
 
-              end #if
+            end #block
 
-            end #each
+            event = EntityModel::EventModel.create(:calais_id => obj[0], :info_hash => attribs)
+            entity.events.add(event)
+
+          end #if
+
+        end #each
       end #each_pair
     end #method
 
@@ -287,7 +268,7 @@ module DoverToCalais
 
       if an_attribute.class.to_s.eql?('DoverToCalais::ResponseData::Entity')
         h = an_attribute.to_hash
-      end   
+      end
 
       if an_attribute.class.to_s.eql?('Hash')
         h = an_attribute
@@ -326,25 +307,25 @@ module DoverToCalais
 
         if @generic_relations_store[ref_key]['relationsubject']
           gr_subject = @generic_relations_store[ref_key]['relationsubject'].match('^http://d.opencalais.com') ?
-                      get_entity(@generic_relations_store[ref_key]['relationsubject']) :
-                      @generic_relations_store[ref_key]['relationsubject']
+          get_entity(@generic_relations_store[ref_key]['relationsubject']) :
+          @generic_relations_store[ref_key]['relationsubject']
         else
           gr_subject = 'N/A'
         end
-        
+
 
         if @generic_relations_store[ref_key]['relationobject']
           gr_object = @generic_relations_store[ref_key]['relationobject'].match('^http://d.opencalais.com') ?
-                      get_entity(@generic_relations_store[ref_key]['relationobject']) :
-                      @generic_relations_store[ref_key]['relationobject']
+          get_entity(@generic_relations_store[ref_key]['relationobject']) :
+          @generic_relations_store[ref_key]['relationobject']
         else
           gr_object = 'N/A'
         end
 
-        GenericRelation.new(gr_subject,  
-                            @generic_relations_store[ref_key]['verb'], 
-                            gr_object,
-                            @generic_relations_store[ref_key]['instances'][0]['exact'] ||= 'N/A')
+        GenericRelation.new(gr_subject,
+        @generic_relations_store[ref_key]['verb'],
+        gr_object,
+        @generic_relations_store[ref_key]['instances'][0]['exact'] ||= 'N/A')
       else
         nil
       end
@@ -386,12 +367,12 @@ module DoverToCalais
     # @param String the OpenCalais ID
     # @return a Hash with the selected matches
     def find_in_relations(ref_key)
-      @generic_relations_store.select{|key, hash| (hash["relationsubject"] == ref_key) || 
-                                                (hash["relationobject"] == ref_key) }
+      @generic_relations_store.select{|key, hash| (hash["relationsubject"] == ref_key) ||
+      (hash["relationobject"] == ref_key) }
 
     end
 
-    # Selects a Hash of events, where the events' key matches the 
+    # Selects a Hash of events, where the events' key matches the
     # specified OpenCalais ID.
     #
     # Only applicable with the JSON (rich) output format
@@ -468,7 +449,8 @@ module DoverToCalais
     end
 
     public :filter
-    private :create_response_item, :prepare_data, :convert_to_hash, :find_in_relations, :find_in_events
+    private :create_response_item, :prepare_data, :convert_to_hash, :find_in_relations, :find_in_events,
+            :get_event, :get_entity
 
   end #class
 

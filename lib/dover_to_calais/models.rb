@@ -28,7 +28,6 @@ module DoverToCalais
       attribute :verb
       attribute :detection
       attribute :calais_id
-      # reference :entity, :EntityModel
 
       index :subject
 
@@ -36,22 +35,12 @@ module DoverToCalais
 
     class EventModel < Ohm::Model
       include Ohm::DataTypes
-      # attribute :type
-      # attribute :info_hash
+
       attribute :calais_id
-
       attribute :info_hash, Type::Hash
-
-
-      # index :type
-      # unique :calais_id
-
 
     end #class
 
   end #class
-
-
-
 
 end
