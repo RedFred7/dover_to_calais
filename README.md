@@ -15,6 +15,9 @@ In general, OpenCalais Simple XML Format (the one used by DoverToCalais) returns
 We can use these tags and the information within them to extract relevant information from the data or to draw useful conclusions about it. For example, if the data source tags include an *&lt;Event&gt;* with the value of *'CompanyExpansion'*, I can then look for the &lt;City&gt; or  &lt;Company&gt; tags to find out which company is expanding and if it's near my location (hint: they may be looking for more staff :))  Or, I could pick out all &lt;Company&gt;s involved in a &lt;JointVenture&gt;, or all  &lt;Person&gt;s implicated in an  &lt;Arrest&gt; in my  &lt;City&gt;, etc.
 
 
+DoverToCalais, from version 0.2.1 onwards also supports the OpenCalais rich [JSON Output format](http://www.opencalais.com/documentation/calais-web-service-api/interpreting-api-response/opencalais-json-output-format). This format returns relationships between entities, as well as the previous tags returned by the Simple XML format, thus allowing a deeper level of data analysis and detection.
+
+
 ## Why use OpenCalais?
 There are many reasons, mainly to:
    
@@ -37,11 +40,13 @@ more modular code.
 
 For more details of the features and code samples, see [Usage](#usage).
 
-##Pre-requisites
+##Pre-requisites and dependencies
 
 To use the OpenCalais Web Service  and -by extension- DoverToCalais, one needs to possess an OpenCalais API key, which is easily obtainable from the [OpenCalais web site](http://www.opencalais.com/APIkey).
 
-Also, DoverToCalais requires the presence of a working [JRE](http://en.wikipedia.org/wiki/JRE#Execution_environment). 
+DoverToCalais requires the presence of a working [JRE](http://en.wikipedia.org/wiki/JRE#Execution_environment). 
+
+Also, if you're going to use the rich JSON output format, you'll need to have [Redis](http://redis.io/topics/quickstart) running on an accessible node.
 
 
 ## Installation
@@ -60,15 +65,8 @@ Or install it yourself as:
 
 
 
-## Dependencies
-DoverToCalais has been developed in Ruby 1.9.3 and relies on the following gems to work (installation with the gem command will automatically install all dependencies)
-
- * 'nokogiri', 1.6.0
- * 'eventmachine', 1.0.3
- * 'em-http-request', 1.1.0
- * 'yomu', 0.1.9 
-
-As [Yomu](https://github.com/Erol/yomu) depends on a working JRE in order to function, so does DoverToCalais.
+## Compatibility
+DoverToCalais has been developed in Ruby 1.9.3 and should work fine on post-1.9.3 MRI versions too. If anyone is succesfully running it on other Ruby runtimes please let me know.
 
 ## Usage
 Using DoverToCalais is extremely simple.
@@ -333,6 +331,115 @@ CalaisOntology::CALAIS_EVENTS
 CalaisOntology::CALAIS_TOPICS
 ```
 
+### Rich output format
+Since version 0.2.1, DoverToCalais users can request to receive the OpenCalais output in OpenCalais's rich JSON format. This has the advantage of producing relation data, which allows for a much deeper level of analysis and data detection.
+
+The rich format can be requested simply by passing one of the following arguments to the *#analyse_this* method: *:rich, :rich_format, :rich_output*, i.e.
+
+```ruby
+dover.analyse_this :rich
+```
+When DoverToCalais processes the *rich* output, it will create a pseudo-relational data model on Redis. The model can then be be queried and searched using standard Ruby and the [Ohm](https://github.com/soveran/ohm) API.
+
+The only difference in DoverToCalais usage when using the *rich* output is that there's no longer a need to do our response analysis in the callback (*#to_calais* method). The callback now only serves to let us know when the response has been processed. Once the callback returns, we know that we can find all our source data nicely modelled in Redis and we can access it ouside and independently of our EventMachine create->analyze->callback loop. 
+
+#### The Data Model
+DoverToCalais creates three kinds of key classes on Redis: *DoverToCalais::EntityModel, DoverToCalais::EntityModel::RelationModel, DoverToCalais::EntityModel::EventModel*.
+
+As is suggested by the namespacing, the relational aspects of the model are that an EntityModel *has* a number of RelationModels and a number of EventModels. Knowing this simple fact, it becomes fairly straightforward to discover which entities are inter-connected and how.
+
+*DoverToCalais::EntityModel* has the following attributes
+
+* name - the entity name - String
+* type - the entity type, e.g. Person, Location, etc - String
+* calais_id - a unique id assigned by OpenCalais - String
+* relations - a set of generic relations connected to the entity - Set
+* events - a set of events connected to the entity - Set
+
+*DoverToCalais::EntityModel::RelationModel* has the following attributes
+
+* subject - the entity applying the action - Hash
+* verb - an action - String
+* object - the entity receiving the action - Hash
+* detection -  the most accurate string description of the relation - String
+* calais_id - a unique id assigned by OpenCalais - String
+
+*DoverToCalais::EntityModel::EventModel* has the following attributes
+
+* calais_id - a unique id assigned by OpenCalais - String
+* info_hash - a Hash incorporating the event's attributes and values. As the number of attributes depends on the type of event (e.g. MilitaryAction will have very different attributes to MovieRelease), the info_hash is a good way to dynamically encapsulate an event's attributes.
+
+#### Redis
+DoverToCalais relies on [Redis](http://redis.io/topics/quickstart) to store processed responses in the rich JSON format. By default, DoverToCalais will use the local Redis instance 127.0.0.1, on the default port 6379 with database #6 (no password). If any of this proves inconvenient, it can be changed by modifying the constant *DoverToCalais::REDIS*.
+
+#### Rich output usage
+
+```ruby
+#probably good idea to clear Redis DB first
+DoverToCalais::flushdb
+EM.run do
+
+    # use Control + C to stop the EM
+    Signal.trap('INT')  { EventMachine.stop }
+    Signal.trap('TERM') { EventMachine.stop }
+
+    # we need an API key to use OpenCalais
+    DoverToCalais::API_KEY =  'my-opencalais-api-key'
+    # create a new dover
+    dover =  DoverToCalais::Dover.new('http://www.bbc.co.uk/news/world-africa-24412315')
+    # parse the text and send it to OpenCalais
+    dover.analyse_this :rich
+    puts 'do some stuff....'
+    # set a callback for when we receive a response
+    dover.to_calais { |response| puts response.error ? response.error : "finished!" }
+
+    puts 'do some more stuff....'
+
+end
+```
+
+As you can see, this isn't much different from our bread-and-butter usage with the simple format. The differences are:
+
+* we clear the Redis data store before we begin. Not a necessary step, but we may want to start on a clean slate. DoverToCalais provides its own method for doing that and it's recommended this method is used instead of an external Redis command .
+* we pass the *:rich* symbol to *#analyse_this*. 
+* in our callback, instead of doing something with the response we simply notify when it's done. What this means is that DoverToCalais has processed the response and has created a data model on Redis. We can now go and search our data model.
+
+
+```ruby
+require 'dover_to_calais'
+
+  #make sure we're connected to the DoverToCalais data-store
+  Ohm.redis = Redic.new(DoverToCalais::REDIS)
+
+  #let's find out how many entities we have in our store
+  puts DoverToCalais::EntityModel.all.to_a.length
+  puts DoverToCalais::EntityModel::RelationModel.all.to_a.length
+  puts DoverToCalais::EntityModel::EventModel.all.to_a.length
+  
+  #find all relations where the subject is Jesse James
+  all_relations = DoverToCalais::EntityModel::RelationModel.all.to_a
+  selected = all_relations.select {|v| v.subject['name'].eql?("Jesse James")}
+  selected.each do |relation|
+    puts relation.subject, relation.verb, relation.object, relation.detection
+  end
+  
+  #get JFK (the Person, not the Airport)
+  presidents = DoverToCalais::EntityModel.find(name: "JFK", type: "Person")
+  
+  #make sure there's only one
+  if presidents.size == 1
+    the_president = presidents.first
+    #get all JFK-related events
+    the_president.events.each do |e|
+      e.info_hash.each_pair do |k,v|
+        puts "#{k}: #{v}"
+      end
+    end
+    
+  end
+  
+```
+
 ###Code samples
 
 More examples of using DoverToCalais can be found as GitHub Gists:
@@ -368,7 +475,7 @@ If you're connecting through a SOCKS5 Proxy just set the *:type* key to :socks5.
 
 ## Documentation
 
-Comprehensive documentation can be found at http://rubydoc.info/gems/dover_to_calais.
+Comprehensive documentation can be found at [rubydoc](http://rubydoc.info/gems/dover_to_calais) and also at [omniref](http://www.omniref.com/?utf8=%E2%9C%93&q=dovertocalais&p=0&r=20&commit=Search).
 
 ## Testing 
 
@@ -395,3 +502,5 @@ Initial release
 Improved Response error message
    * **10-Feb-2014** Version: 0.2.0  
 Added #analyse_this to public interface
+   * **24-Mar-2014** Version: 0.2.1  
+New feature: rich JSON output analysis and Redis data modelling
