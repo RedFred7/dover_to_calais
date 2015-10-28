@@ -1,5 +1,5 @@
-# ********************************************* IMPORTANT NOTICE *********************************************
-## As of __30 September__ 2015, the OpenCalais API on which this gem is built, has been discontinued by Thomson-Reuters. A ##new and significantly changed API is now in use by OpenCalais. You can read about the changes ##[here](http://www.opencalais.com/upgrade/). Unfortunately this means that DoverToCalais is no longer functional. I don't ##know -at this stage- if and when I'll upgrade this gem to the new API. Thank you for your time and effort in using ##DoverToCalais.
+# **************IMPORTANT NOTICE ************
+## As of __30 September__ 2015, the OpenCalais API on which this gem is built, has been discontinued by Thomson-Reuters. A new and significantly changed API is now in use by OpenCalais. You can read about the changes [here](http://www.opencalais.com/upgrade/). Unfortunately this means that DoverToCalais is no longer functional. I don't know -at this stage- if and when I'll upgrade this gem to the new API. Thank you for your time and effort in using DoverToCalais.
 
 # DoverToCalais
 
@@ -505,3 +505,7 @@ Improved Response error message
 Added #analyse_this to public interface
    * **24-Mar-2014** Version: 0.2.1  
 New feature: rich JSON output analysis and Redis data modelling
+
+
+# **************IMPORTANT NOTICE ************
+## As of __30 September__ 2015, the OpenCalais API on which this gem is built, has been discontinued by Thomson-Reuters. A new and significantly changed API is now in use by OpenCalais. You can read about the changes [here](http://www.opencalais.com/upgrade/). Unfortunately this means that DoverToCalais is no longer functional. I don't know -at this stage- if and when I'll upgrade this gem to the new API. Thank you for your time and effort in using DoverToCalais.
