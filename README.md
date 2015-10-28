@@ -1,4 +1,5 @@
-
+# ********************************************* IMPORTANT NOTICE *********************************************
+## As of __30 September__ 2015, the OpenCalais API on which this gem is built, has been discontinued by Thomson-Reuters. A ##new and significantly changed API is now in use by OpenCalais. You can read about the changes ##[here](http://www.opencalais.com/upgrade/). Unfortunately this means that DoverToCalais is no longer functional. I don't ##know -at this stage- if and when I'll upgrade this gem to the new API. Thank you for your time and effort in using ##DoverToCalais.
 
 # DoverToCalais
 
